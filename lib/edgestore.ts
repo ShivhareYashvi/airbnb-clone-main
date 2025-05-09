@@ -1,9 +1,14 @@
-"use client";
+// lib/edgestore.ts
+'use client'
+import { initEdgeStore } from '@edgestore/server';
 
-import { type EdgeStoreRouter } from "@/app/api/edgestore/[...edgestore]/route";
-import { createEdgeStoreProvider } from "@edgestore/react";
+// Create an instance of EdgeStore
+const es = initEdgeStore.create();
 
-const { EdgeStoreProvider, useEdgeStore } =
-  createEdgeStoreProvider<EdgeStoreRouter>();
+// Create the router with your API
+export const edgeStoreRouter = es.router({
+  publicFiles: es.fileBucket(), // Configure the file bucket as needed
+});
 
-export { EdgeStoreProvider, useEdgeStore };
+// Export the router type if needed elsewhere
+export type EdgeStoreRouter = typeof edgeStoreRouter;
