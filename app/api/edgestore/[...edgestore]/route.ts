@@ -1,12 +1,10 @@
-// lib/edgestore.ts
+// app/api/edgestore/[...edgestore]/route.ts
 
-import { initEdgeStore } from '@edgestore/server';
+import { createEdgeStoreNextHandler } from '@edgestore/server/adapters/next/app';
+import { edgeStoreRouter } from '@/lib/edgestore'; // Adjust path if needed
 
-export const edgeStoreRouter = initEdgeStore.create().router({
-  publicFiles: initEdgeStore.create().fileBucket({
-    maxSize: 1024 * 1024 * 10, // 10 MB limit (optional)
-    accept: ['image/*', 'application/pdf'], // customize as needed
-  }),
+const handler = createEdgeStoreNextHandler({
+  router: edgeStoreRouter,
 });
 
-export type EdgeStoreRouter = typeof edgeStoreRouter;
+export { handler as GET, handler as POST };
