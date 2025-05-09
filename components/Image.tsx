@@ -1,44 +1,38 @@
-"use client";
+import { useEdgeStore } from "@/lib/edgestore";  // Correctly importing the hook
 import { useState } from "react";
-import Image from "next/image";
-import { cn } from "@/utils/helper";
+import SpinnerMini from "./Loader";
 
-const CustomImage = ({
-  imageSrc,
-  fill = false,
-  alt,
-  className,
-  priority = false,
-  effect,
-  sizes
-}: {
-  imageSrc: string;
-  fill?: boolean;
-  alt: string;
-  className?: string;
-  priority?: boolean;
-  effect?: "zoom";
-  sizes?: string;
-}) => {
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+interface ImageUploadProps {
+  // Define your props here
+}
+
+const ImageUpload: React.FC<ImageUploadProps> = () => {
+  const { edgestore, setEdgestore } = useEdgeStore();
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!edgestore) {
+    return <SpinnerMini />; // Loading spinner until the edgestore is initialized
+  }
+
+  // Image upload logic here using edgestore
+  const handleImageUpload = async () => {
+    setIsLoading(true);
+    // Example logic: Upload an image using edgestore
+    try {
+      const result = await edgestore.publicFiles.upload(/* file upload code */);
+      console.log('Upload successful', result);
+    } catch (error) {
+      console.error('Error uploading image', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <Image
-      fill={fill}
-      className={cn(
-        `transition duration-300`,
-        effect === "zoom" && "scale-95",
-        isImageLoaded ? "opacity-100 scale-100" : "opacity-0",
-        className
-      )}
-      src={imageSrc}
-      alt={alt}
-      onLoad={() => setIsImageLoaded(true)}
-      priority={priority}
-      sizes={sizes}
-      unoptimized
-    />
+    <div>
+      {isLoading ? <SpinnerMini /> : <button onClick={handleImageUpload}>Upload Image</button>}
+    </div>
   );
 };
 
-export default CustomImage;
+export default ImageUpload;
