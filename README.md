@@ -35,7 +35,7 @@ Make sure you have the following software installed on your system:
 - Clone the repository:
 
   ```
-  
+  https://github.com/ShivhareYashvi/airbnb-clone-main.git
   ```
 
 - Navigate to the project directory:
